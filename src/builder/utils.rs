@@ -27,7 +27,7 @@ use super::super::node;
 /// Generate an unsuffixed integer literal expression with a dummy span
 pub fn expr_int(cx: &ExtCtxt, n: Spanned<i64>) -> P<ast::Expr> {
   let sign = if n.node < 0 {ast::Minus} else {ast::Plus};
-  cx.expr_lit(n.span, ast::LitInt(n.node as u64, ast::UnsuffixedIntLit(sign)))
+  cx.expr_lit(n.span, ast::LitKind::Int(n.node as u64, ast::UnsuffixedIntLit(sign)))
 }
 
 /// The name of the structure representing a register
