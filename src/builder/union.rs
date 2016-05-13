@@ -17,7 +17,7 @@ use std::rc::Rc;
 use std::iter::FromIterator;
 use syntax::ast;
 use syntax::ptr::P;
-use syntax::codemap::{DUMMY_SP, dummy_spanned, respan, Spanned};
+use syntax::codemap::{DUMMY_SP, respan, Spanned};
 use syntax::ext::base::ExtCtxt;
 use syntax::ext::build::AstBuilder;
 
@@ -85,7 +85,7 @@ impl<'a> BuildUnionTypes<'a> {
 }
 
 fn expr_usize(cx: &ExtCtxt, n: Spanned<u64>) -> P<ast::Expr> {
-  cx.expr_lit(n.span, ast::LitKind::Int(n.node as u64, ast::UnsignedIntLit(ast::UintTy::Us)))
+  cx.expr_lit(n.span, ast::LitKind::Int(n.node as u64, ast::LitIntType::Unsigned(ast::UintTy::Us)))
 }
 
 /// Returns the type of the field representing the given register
@@ -98,7 +98,7 @@ fn reg_struct_type(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg)
     1 => base_ty,
     n =>
       cx.ty(reg.count.span,
-            ast::TyFixedLengthVec(base_ty, expr_usize(cx, respan(reg.count.span, n as u64)))),
+            ast::TyKind::FixedLengthVec(base_ty, expr_usize(cx, respan(reg.count.span, n as u64)))),
   }
 }
 
@@ -123,16 +123,14 @@ impl<'a> BuildUnionTypes<'a> {
     };
     let mut field_path = path.clone();
     field_path.push(reg.name.node.clone());
-    dummy_spanned(
-      ast::StructField_ {
-        kind: ast::NamedField(
-          self.cx.ident_of(reg.name.node.as_str()),
-          ast::Public),
-        id: ast::DUMMY_NODE_ID,
-        ty: reg_struct_type(self.cx, &field_path, reg),
-        attrs: attrs,
-      }
-    )
+    ast::StructField {
+      span: reg.name.span,
+      ident: Some(self.cx.ident_of(reg.name.node.as_str())),
+      vis: ast::Visibility::Public,
+      id: ast::DUMMY_NODE_ID,
+      ty: reg_struct_type(self.cx, &field_path, reg),
+      attrs: attrs,
+    }
   }
 
   /// Build field for padding or a register
@@ -150,17 +148,15 @@ impl<'a> BuildUnionTypes<'a> {
         let ty: P<ast::Ty> =
           self.cx.ty(
             DUMMY_SP,
-            ast::TyFixedLengthVec(u8_ty, expr_usize(self.cx, respan(DUMMY_SP, length))));
-        dummy_spanned(
-          ast::StructField_ {
-            kind: ast::NamedField(
-              self.cx.ident_of(format!("_pad{}", index).as_str()),
-              ast::Inherited),
-            id: ast::DUMMY_NODE_ID,
-            ty: ty,
-            attrs: Vec::new(),
-          },
-        )
+            ast::TyKind::FixedLengthVec(u8_ty, expr_usize(self.cx, respan(DUMMY_SP, length))));
+        ast::StructField {
+          span: ty.span,
+          ident: Some(self.cx.ident_of(format!("_pad{}", index).as_str())),
+          vis: ast::Visibility::Inherited,
+          id: ast::DUMMY_NODE_ID,
+          ty: ty,
+          attrs: Vec::new(),
+        }
       },
     }
   }
@@ -199,8 +195,8 @@ impl<'a> BuildUnionTypes<'a> {
       ident: name,
       attrs: attrs,
       id: ast::DUMMY_NODE_ID,
-      node: ast::ItemStruct(struct_def, ast::Generics::default()),
-      vis: ast::Public,
+      node: ast::ItemKind::Struct(struct_def, ast::Generics::default()),
+      vis: ast::Visibility::Public,
       span: reg.name.span,
     });
     let mut full_size: u64 = 0;

@@ -124,7 +124,7 @@ fn from_primitive(cx: &ExtCtxt, path: &Vec<String>, _: &node::Reg,
   match field.ty.node {
     node::FieldType::UIntField => prim,
     node::FieldType::BoolField =>
-      cx.expr_binary(field.bit_range_span, ast::BinOpKind::BiNe,
+      cx.expr_binary(field.bit_range_span, ast::BinOpKind::Ne,
                      prim, utils::expr_int(cx, respan(field.bit_range_span, 0))),
     node::FieldType::EnumField {opt_name: _, variants: ref vars} => {
       let mut arms: Vec<ast::Arm> = Vec::new();
