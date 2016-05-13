@@ -63,7 +63,7 @@ pub fn doc_attribute(cx: &ExtCtxt, docstring: token::InternedString)
                      -> ast::Attribute {
   use syntax::codemap::DUMMY_SP;
 
-  let s: ast::Lit_ = ast::LitStr(docstring, ast::CookedStr);
+  let s: ast::LitKind = ast::LitKind::Str(docstring, ast::StrStyle::Cooked);
   let attr =
     cx.meta_name_value(DUMMY_SP, token::InternedString::new("doc"), s);
   cx.attribute(DUMMY_SP, attr)
@@ -134,7 +134,7 @@ pub fn field_type_path(cx: &ExtCtxt, path: &Vec<String>,
 
 pub fn unwrap_impl_item(item: P<ast::Item>) -> P<ast::ImplItem> {
   match item.node {
-    ast::ItemImpl(_, _, _, _, _, ref items) => {
+    ast::ItemKind::Impl(_, _, _, _, _, ref items) => {
       items.clone().pop().expect("ImplItem not found")
     },
     _ => panic!("Tried to unwrap ImplItem from Non-Impl")

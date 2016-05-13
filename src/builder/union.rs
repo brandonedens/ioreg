@@ -85,7 +85,7 @@ impl<'a> BuildUnionTypes<'a> {
 }
 
 fn expr_usize(cx: &ExtCtxt, n: Spanned<u64>) -> P<ast::Expr> {
-  cx.expr_lit(n.span, ast::LitKind::Int(n.node as u64, ast::UnsignedIntLit(ast::TyUs)))
+  cx.expr_lit(n.span, ast::LitKind::Int(n.node as u64, ast::UnsignedIntLit(ast::UintTy::Us)))
 }
 
 /// Returns the type of the field representing the given register
