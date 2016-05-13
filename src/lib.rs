@@ -330,8 +330,6 @@ N => NAME
 #![feature(quote, plugin_registrar, rustc_private, convert)]
 #![feature(plugin)]
 
-#![plugin(syntaxext_lint)]
-
 extern crate rustc;
 extern crate syntax;
 extern crate serialize;

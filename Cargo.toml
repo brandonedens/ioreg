@@ -7,8 +7,7 @@ authors = ["Zinc Developers <zinc@github.com>"]
 name = "ioreg"
 plugin = true
 
+[dependencies]
+
 [dev-dependencies.volatile_cell]
 path = "./volatile_cell"
-
-[dependencies]
-syntaxext_lint = "*"
