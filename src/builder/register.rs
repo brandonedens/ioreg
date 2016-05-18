@@ -20,8 +20,6 @@ use syntax::ast;
 use syntax::ptr::P;
 use syntax::codemap::{respan, mk_sp};
 use syntax::ext::base::ExtCtxt;
-use syntax::ext::build::AstBuilder;
-use syntax::ext::quote::rt::ToTokens;
 
 use super::Builder;
 use super::utils;

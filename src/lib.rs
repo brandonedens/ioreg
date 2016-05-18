@@ -327,7 +327,7 @@ N => NAME
 
 */
 
-#![feature(quote, plugin_registrar, rustc_private, convert, type_ascription)]
+#![feature(quote, plugin_registrar, rustc_private, type_ascription)]
 #![feature(plugin)]
 
 extern crate rustc;

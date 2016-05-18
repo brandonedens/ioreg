@@ -21,7 +21,6 @@ use syntax::ptr::P;
 use syntax::ext::base::ExtCtxt;
 use syntax::codemap::{respan, Span};
 use syntax::ext::build::AstBuilder;
-use syntax::ext::quote::rt::ToTokens;
 
 use super::Builder;
 use super::super::node;

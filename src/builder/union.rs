@@ -135,7 +135,6 @@ impl<'a> BuildUnionTypes<'a> {
 
   /// Build field for padding or a register
   // Dummy spans allowed here because u8 doesn't come from anywhere
-  #[allow(dummy_span)]
   fn build_pad_or_reg(&self, path: &Vec<String>, reg_or_pad: RegOrPadding,
                       index: usize) -> ast::StructField {
     match reg_or_pad {
